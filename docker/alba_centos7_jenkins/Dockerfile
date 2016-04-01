@@ -19,8 +19,8 @@ RUN mkdir /home/alba
 RUN wget https://raw.github.com/ocaml/opam/master/shell/opam_installer.sh
 RUN sh ./opam_installer.sh /usr/local/bin 4.02.3
 
-ENV opam_env='opam config env --root=/home/alba/OPAM'
-RUN opam init --root=/home/alba/OPAM --comp 4.02.3
+ENV opam_env='opam config env --root=/home/alba/.opam'
+RUN opam init --root=/home/alba/.opam --comp 4.02.3
 
 
 
@@ -146,7 +146,6 @@ RUN echo "jenkins ALL=NOPASSWD: ALL" >/etc/sudoers.d/jenkins
 
 RUN yum -y install iproute
 
-ENV opam_env='opam config env --root=/home/alba/OPAM'
 ENV ARAKOON_BIN=arakoon
 CMD eval `${opam_env}` \
     && echo ${SUITE} \

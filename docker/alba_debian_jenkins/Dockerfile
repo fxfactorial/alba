@@ -44,9 +44,9 @@ RUN mkdir /home/alba
 RUN wget https://raw.github.com/ocaml/opam/master/shell/opam_installer.sh
 env ocaml_version=4.02.3
 RUN sh ./opam_installer.sh /usr/local/bin ${ocaml_version}
-env opam_root=/home/alba/OPAM
+env opam_root=/home/alba/.opam
 ENV opam_env="opam config env --root=${opam_root}"
-RUN opam init --root=/home/alba/OPAM --comp ${ocaml_version}
+RUN opam init --root=${opam_root} --comp ${ocaml_version}
 RUN eval `${opam_env}` && \
     opam update && \
     opam install -y \
