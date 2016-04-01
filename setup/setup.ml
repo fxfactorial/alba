@@ -1348,6 +1348,7 @@ module Test = struct
           make_cert base asd_id;
         end;
       let cmd = [
+          "strace";
           (*"valgrind"; "--track-origins=yes"; *)
           cfg.alba_bin; "unit-tests";
           "--config" ; t.abm # config_url |> Url.canonical
