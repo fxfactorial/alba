@@ -619,37 +619,24 @@ let execute_query : type req res.
                         DirectoryInfo.with_blob_fd
                           dir_info fnr
                           (fun blob_fd ->
-                           let blob_ufd = Lwt_unix.unix_file_descr blob_fd in
-                           let () =
-                             if dir_info.DirectoryInfo.use_fadvise
-                             then
-                               begin
-                                 Posix.posix_fadvise blob_ufd 0 size Posix.POSIX_FADV_RANDOM;
-                                 List.iter
-                                   (fun (offset, length) ->
-                                    Posix.posix_fadvise
-                                      blob_ufd
-                                      offset length
-                                      Posix.POSIX_FADV_WILLNEED)
-                                   slices
-                               end
-                           in
                            Lwt_list.iter_s
                              (fun (offset, length) ->
-                              Net_fd.sendfile_all
-                                ~fd_in:blob_fd ~offset
-                                ~fd_out:nfd
-                                length
-                              >>= fun () ->
-                              let () =
-                                if dir_info.DirectoryInfo.use_fadvise
-                                then
-                                  Posix.posix_fadvise
-                                    blob_ufd
-                                    0 size
-                                    Posix.POSIX_FADV_DONTNEED
-                              in
-                              Lwt.return_unit)
+                              Aio_lwt.(pread
+                                         default_context
+                                         blob_fd
+                                         offset
+                                         length) >>= fun bss ->
+                              Lwt.finalize
+                                (fun () ->
+                                 Net_fd.write_all_lwt_bytes
+                                   nfd
+                                   bss.Bigstring_slice.bs
+                                   bss.Bigstring_slice.offset
+                                   bss.Bigstring_slice.length)
+                                (fun () ->
+                                 Lwt_bytes.unsafe_destroy bss.Bigstring_slice.bs;
+                                 Lwt.return_unit)
+                             )
                              slices
                           )
                       end

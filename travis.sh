@@ -6,7 +6,7 @@ APT_DEPENDS="libssl-dev libsnappy-dev \
              protobuf-compiler libjerasure-dev \
              build-essential automake autoconf yasm \
              procps python-pip \
-             aspcud"
+             aspcud libaio-dev"
 APT_OCAML_DEPENDS="ocaml ocaml-native-compilers camlp4-extra opam"
 OPAM_DEPENDS="ocamlfind \
          ssl.0.5.2 \
@@ -30,7 +30,8 @@ OPAM_DEPENDS="ocamlfind \
          core.113.00.00 \
          conf-libev \
          redis \
-         uri
+         uri \
+         aio.0.0.3
 "
 
 export OPAMYES=1

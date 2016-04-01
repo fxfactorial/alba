@@ -6,7 +6,9 @@ RUN yum -y install curl
 RUN yum -y install make m4 gcc patch unzip
 RUN yum -y install git rsync mercurial
 RUN yum -y install gcc-c++
-RUN yum -y install bzip2-devel libffi-devel snappy-devel libev-devel
+RUN yum -y install
+    bzip2-devel libffi-devel snappy-devel libev-devel \
+    libaio-dev
 RUN yum -y install python-devel
 
 # TODO: What about darcs ?
@@ -70,7 +72,8 @@ RUN eval `${opam_env}` && \
         ppx_deriving_yojson \
         core.113.00.00 \
         redis \
-        uri.1.9.1
+        uri.1.9.1 \
+        aio.0.0.3
 
 
 RUN yum -y install autoconf help2man perl-Thread-Queue

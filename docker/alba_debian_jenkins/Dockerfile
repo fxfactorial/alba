@@ -35,7 +35,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         libboost-all-dev \
         fuse \
         sysstat \
-        ncurses-dev
+        ncurses-dev \
+        libaio-dev
 
 RUN useradd jenkins -u 1001 -g root
 
@@ -73,7 +74,8 @@ RUN eval `${opam_env}` && \
         ppx_deriving_yojson \
         core.113.00.00 \
         redis \
-        uri.1.9.1
+        uri.1.9.1 \
+        aio.0.0.3
 
 RUN wget https://01.org/sites/default/files/downloads/intelr-storage-acceleration-library-open-source-version/isa-l-2.14.0.tar.gz
 RUN tar xfzv isa-l-2.14.0.tar.gz
